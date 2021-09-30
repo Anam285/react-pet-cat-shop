@@ -1,4 +1,4 @@
-
+import cart from './components/cart'
 import './App.css';
 // import CatApi from './CatApi';
 import {useState, useEffect} from 'react';
