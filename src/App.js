@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 import faker from "faker"
 import Header from './components/Header'
 // import Cart from './components/Cart'
+import { commerce } from "faker"
 
 function App() {
   const [sibr, setSibr]= useState([])
@@ -48,9 +49,6 @@ function App() {
       console.log(typeof(item.price))
       console.log(item.price)
     }
-
-
-
     setSibr(newData)
   
   }
@@ -137,7 +135,6 @@ const CatImg =(props) => {
           breed= {item.breeds[0].name}
           price= {item.price}
           handleAdd={() => props.handleAdd(item)}
-
         />
       )
     })
