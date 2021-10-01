@@ -2,11 +2,12 @@ import cart from './components/cart'
 import './App.css';
 // import CatApi from './CatApi';
 import {useState, useEffect} from 'react';
-const faker = require('faker')
+import { commerce } from "faker"
 
 function App() {
   const [sibr, setSibr]= useState([])
   const [beng, setBeng]= useState([])
+  const [basket, setBasket] = useState([])
 
   useEffect(()=>{
     handleFetchSibr()
@@ -16,9 +17,6 @@ function App() {
     handleFetchBeng()
   },[])
 
- 
-
-
   const handleFetchBeng = async () => {
     let newData = []
 
@@ -27,7 +25,7 @@ function App() {
     
     for (let i = 0; i < newData.length; i++) {
       const item = newData[i];
-      item.price = faker.commerce.price()
+      item.price = commerce.price()
     }
 
     setBeng(newData)
@@ -41,13 +39,14 @@ function App() {
     newData = await response.json();
     for (let i = 0; i < newData.length; i++) {
       const item = newData[i];
-      item.price = faker.commerce.price()
+      item.price = commerce.price()
     }
-
-
-
     setSibr(newData)
   
+  }
+
+  const handleAdd = (item) => {
+    setBasket([...basket, item])
   }
 
   return (
@@ -57,15 +56,15 @@ function App() {
           <h1>Pet Shop</h1>
           <div className="wrapperBeng">
             <Catdesc data={sibr}/>
-            <CatInfo data={sibr}/>
+            <CatInfo data={sibr} handleAdd={handleAdd} />
             <button onClick={handleFetchSibr}>More Siberian</button>
           </div>
           <div className="wrapperBeng">
             <Catdesc data={beng}/>
-            <CatInfo data={beng}/>
+            <CatInfo data={beng} handleAdd={handleAdd} />
             <button onClick={handleFetchBeng}>More BengalCats</button>
-            </div>
-                  </>
+          </div>
+        </>
       :
         <h3>Loading...</h3>
       }
@@ -77,20 +76,9 @@ function App() {
 const CatInfo = (props) => {
   return (
      <div className="wrapper">
-      <CatImg data={props.data} />
+      <CatImg data={props.data} handleAdd={props.handleAdd}/>
       
     </div>
-  )
-}
-const Detail = (props) => {
-  return (
-    <>
-      <div className="wrapperCat">
-        <img src={props.imgSrc} alt="cant access image"/>
-        {/* {props.breed} */}
-        <h4>Price: £{props.price}</h4>
-      </div>
-    </>
   )
 }
 
@@ -113,16 +101,25 @@ const CatImg =(props) => {
           key = {index}
           breed= {item.breeds[0].name}
           price= {item.price}
-
+          handleAdd={() => props.handleAdd(item)}
         />
       )
     })
   )
 }
 
-
-
-
+const Detail = (props) => {
+  return (
+    <>
+      <div className="wrapperCat">
+        <img src={props.imgSrc} alt="cant access image"/>
+        {/* {props.breed} */}
+        <h4>Price: £{props.price}</h4>
+        <button onClick={props.handleAdd}>Add to cart</button>
+      </div>
+    </>
+  )
+}
 
 
 
