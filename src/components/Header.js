@@ -5,7 +5,7 @@ export default function Header(props) {
         <header className="wrapperHead">
             
                 <a className="title" href="#/">
-                    <h2>Welcome to Cats4Life</h2>
+                    <h2>Welcome to Cat Pet Shop</h2>
                 </a>
                 <h3> 
                 <a className= "cartIcon">cart</a></h3>
