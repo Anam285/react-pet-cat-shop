@@ -1,17 +1,19 @@
 // import cart from './components/cart'
 import './App.css';
-// import CatApi from './CatApi';
 import {useState, useEffect} from 'react';
 import faker from "faker"
 import Header from './components/Header'
-// import Cart from './components/Cart'
-import { commerce } from "faker"
+import { Modal } from './components/Modal';
+import styled from 'styled-components';
+
+
 
 function App() {
   const [sibr, setSibr]= useState([])
   const [beng, setBeng]= useState([])
   const [basket, setBasket] = useState([])
   const [total,setTotal]= useState(0)
+  const [showModal, setShowModal] = useState(false)
   // const [basketTotal,setBasketTotal] = useState(0)
   
 
@@ -71,29 +73,35 @@ function App() {
 
   }
 
+  const openModal = () => {
+    setShowModal(prev => !prev)
+  }
+
   return (
     <div className="App">
       {beng.length > 0 && sibr.length > 0 ? 
         <>
-          <Header/>
+          <Header handleToggle = {openModal} basket={basket}/>
+          <Modal showModal = {showModal} setShowModal = {setShowModal} basket = {basket} handleDel={handleDelete} total={total}/>
           <div className="pagewrapper">
            
             <div>
               <div className="wrapperBeng">
                 <Catdesc data={sibr}/>
                 <CatInfo data={sibr} handleAdd={handleAdd}/>
-                <button onClick={handleFetchSibr}>More Siberian</button>
+                <ButtonCat onClick={handleFetchSibr}>More Siberian</ButtonCat>
               </div>
               <div className="wrapperBeng">
                 <Catdesc data={beng}/>
+                
                 <CatInfo data={beng} handleAdd={handleAdd}/>
-                <button onClick={handleFetchBeng}>More BengalCats</button>
+                <ButtonCat onClick={handleFetchBeng}>More BengalCats</ButtonCat>
                 </div>
             </div>
-            <div className="cart">
+            {/* <div className="cart">
               <Cart basket={basket} handleDel={handleDelete}/>
               <BasketTotal total={total}/>
-            </div>
+            </div> */}
           </div>
         </>
 
@@ -109,6 +117,7 @@ function App() {
 const CatInfo = (props) => {
   return (
      <div className="wrapper">
+      
       <CatImg data={props.data} handleAdd={props.handleAdd}/>
       
     </div>
@@ -145,54 +154,81 @@ const Detail = (props) => {
   return (
     <>
       <div className="wrapperCat">
+        <OneCat>
         <img src={props.imgSrc} alt="cant access image"/>
-        {/* {props.breed} */}
-        <h4>Price: £{props.price}</h4>
-        <button onClick={props.handleAdd}>add to cart</button>
+        
+        <h4>Price: £{props.price}</h4></OneCat>
+        <Button onClick={props.handleAdd}>add to cart</Button>
       </div>
     </>
   )
 }
-const BasketTotal = (props) => {
-  return (
-  <h4>Total = {props.total}</h4>)
-}
 
-const ShopListItem = (props) => {
-  return (
-      <ul>
-        <li className="cart-item">
-          <img className="basketImg" src={props.imgsrc} alt="cat" />
-          <h4>Price: {props.price}</h4>
-          <button onClick={props.handleDelete}>Del</button>
+const Button = styled.button`
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.25em 1em;
+    color:palevioletred;
+    border: 2px solid palevioletred;
+    border-radius: 5px;`;
+  
+const ButtonCat = styled.button`
+    min-width:100px;
+    height:40px;
+    color:white;
+    border-radius:5px;
+    margin-top:15px;
 
-        </li>
-      </ul>)
-}
-const Cart = (props) => {
+    background: #141414;`
 
-  return (  
-    <>
-    {props.basket.length > 0 ?     
-        props.basket.map((item) => {
-          return (
-                <ShopListItem
+  const OneCat = styled.div`
+    
+     margin-left:10px;
+     background:rgba(0,0,0,0.2);
+     border-radius:5px;
+     padding:10px;
+    
+     `
+// const BasketTotal = (props) => {
+//   return (
+//   <h4>Total = £ {props.total}</h4>)
+// }
+
+// const ShopListItem = (props) => {
+//   return (
+//       <ul>
+//         <li className="cart-item">
+//           <img className="basketImg" src={props.imgsrc} alt="cat" />
+//           <h4>  £{props.price}</h4>
+//           <button onClick={props.handleDelete}>Del</button>
+
+//         </li>
+//       </ul>)
+// }
+// const Cart = (props) => {
+
+//   return (  
+//     <>
+//     {props.basket.length > 0 ?     
+//         props.basket.map((item) => {
+//           return (
+//                 <ShopListItem
                     
-                    key={item.id}
-                    imgsrc={item.url}
-                    price={item.price}
-                    handleDelete={() => props.handleDel(item)}/>
+//                     key={item.id}
+//                     imgsrc={item.url}
+//                     price={item.price}
+//                     handleDelete={() => props.handleDel(item)}/>
 
-          )})
-      :
-      <p>Nothing in your basket</p>}
+//           )})
+//       :
+//       <p>Nothing in your basket</p>}
       
     
-      </>
+//       </>
  
-  )
+//   )
   
-}
+// }
 
 
 
